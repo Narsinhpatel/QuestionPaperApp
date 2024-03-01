@@ -1,0 +1,67 @@
+﻿@model IEnumerable<QuestionPaperApp.Models.Answer>
+
+@{
+    ViewBag.Title = "ViewAnswer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    /* Custom CSS styles */
+    .answer-table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+        .answer-table th,
+        .answer-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        .answer-table th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #f2f2f2;
+            color: #333;
+        }
+
+        .answer-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+</style>
+
+@{
+    int score = 0;
+}
+
+<h2 class="mt-4 mb-3">View Answer Sheet</h2>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-striped answer-table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Question Paper Title</th>
+                <th scope="col">Question</th>
+                <th scope="col">Selected Option</th>
+                <th scope="col">Is Correct</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.QuestionPaper.Title)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Question.QuestionText)</td>
+                    <td>@Html.DisplayFor(modelItem => item.SelectedOption)</td>
+                    <td>@Html.DisplayFor(modelItem => item.IsCorrect)</td>
+                    @{ if (Convert.ToBoolean(item.IsCorrect)) { score++; } }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <strong>Score:</strong> @score
+</div>

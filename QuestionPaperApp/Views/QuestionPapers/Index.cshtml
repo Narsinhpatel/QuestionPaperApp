@@ -1,0 +1,98 @@
+﻿@model IEnumerable<QuestionPaperApp.Models.QuestionPaper>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .table {
+        width: 100%;
+        margin-bottom: 1rem;
+        background-color: transparent;
+    }
+
+        .table th,
+        .table td {
+            padding: 0.75rem;
+            vertical-align: top;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .table thead th {
+            vertical-align: bottom;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .table tbody + tbody {
+            border-top: 2px solid #dee2e6;
+        }
+
+    .create-new-link {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background-color: #0e1c36;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+    }
+
+        .create-new-link:hover {
+            background-color: #0c204b;
+        }
+</style>
+@Html.Partial("_Notification")
+<h2 class="mt-5 mb-3">Welcome @Session["UserRole"]!!!!</h2>
+
+<p class="text-center">
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-info", style = "border-radius: 5px; margin-right: 5px;" })
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Title)</th>
+            <th>@Html.DisplayNameFor(model => model.Description)</th>
+            <th>@Html.DisplayNameFor(model => model.CreationDate)</th>
+            <th>@Html.DisplayNameFor(model => model.Status)</th>
+            <th>@Html.DisplayNameFor(model => model.CreatorID)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Title)</td>
+                <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                <td>@Html.DisplayFor(modelItem => item.CreationDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                <td>@Html.DisplayFor(modelItem => item.CreatorID)</td>
+                <td>
+                    @{
+                        bool isDraft = item.Status.Equals("Draft", StringComparison.OrdinalIgnoreCase);
+                        bool isPending = item.Status.Equals("Pending", StringComparison.OrdinalIgnoreCase);
+                        bool isApproved = item.Status.Equals("Approved", StringComparison.OrdinalIgnoreCase);
+                    }
+
+                    @if (isDraft)
+                    {
+                        @Html.ActionLink("Edit", "Edit", new { id = item.QuestionPaperID }, new { @class = "btn btn-info", style = "border-radius: 5px; margin-right: 5px;" })
+                        @Html.ActionLink("Add Questions", "Index", "Questions", new { questionPaperID = item.QuestionPaperID }, new { @class = "btn btn-primary", style = "border-radius: 5px; margin-right: 5px;" })
+                        @Html.ActionLink("Delete", "Delete", new { id = item.QuestionPaperID }, new { @class = "btn btn-danger", style = "border-radius: 5px; margin-right: 5px;" })
+
+                        // Add button to change status from Draft to Pending
+                        @Html.ActionLink("Send Request", "ChangeStatus", new { id = item.QuestionPaperID, newStatus = "Pending" }, new { @class = "btn btn-warning", style = "border-radius: 5px; margin-right: 5px;" })
+                    }
+                    else if (isPending)
+                    { @Html.ActionLink("Edit", "Edit", new { id = item.QuestionPaperID }, new { @class = "btn btn-info", style = "border-radius: 5px; margin-right: 5px;" })
+                    @Html.ActionLink("Add Questions", "Index", "Questions", new { questionPaperID = item.QuestionPaperID }, new { @class = "btn btn-primary", style = "border-radius: 5px; margin-right: 5px;" })
+                    @Html.ActionLink("Delete", "Delete", new { id = item.QuestionPaperID }, new { @class = "btn btn-danger", style = "border-radius: 5px; margin-right: 5px;" })
+                }
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

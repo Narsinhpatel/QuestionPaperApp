@@ -1,0 +1,87 @@
+﻿@model QuestionPaperApp.Models.User
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    /* Custom CSS styles */
+    .container {
+        margin-top: 50px; /* Added margin top */
+    }
+
+    .row {
+        justify-content: center; /* Center align the row content */
+    }
+
+    .col-md-8 {
+        margin-top: 20px; /* Added margin top */
+    }
+
+    .form-horizontal {
+        max-width: 600px; /* Adjust as needed */
+        margin: 0 auto;
+    }
+
+        .form-horizontal h4 {
+            margin-top: 20px;
+        }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .btn-delete {
+        border-radius: 20px; /* Adjust border radius as needed */
+    }
+</style>
+
+<h2 class="text-center">Delete</h2>
+
+<h3 class="text-center mt-4">Are you sure you want to delete this?</h3>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="form-horizontal">
+                <h4>User</h4>
+                <hr />
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Username)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Username)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Email)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Email)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Role)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Role)
+                    </dd>
+                </dl>
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-group ">
+                        <input type="submit" value="Delete" class="btn btn-danger btn-delete" /> 
+                        @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-secondary btn-delete" }) 
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

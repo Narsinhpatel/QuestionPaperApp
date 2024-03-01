@@ -1,0 +1,362 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="QAManagementModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Answer">
+          <Key>
+            <PropertyRef Name="AnswerID" />
+          </Key>
+          <Property Name="AnswerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuestionID" Type="int" />
+          <Property Name="QuestionPaperID" Type="int" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="SelectedOption" Type="nvarchar(max)" />
+          <Property Name="IsCorrect" Type="bit" />
+        </EntityType>
+        <EntityType Name="QuestionPapers">
+          <Key>
+            <PropertyRef Name="QuestionPaperID" />
+          </Key>
+          <Property Name="QuestionPaperID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="CreationDate" Type="datetime" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreatorID" Type="int" />
+        </EntityType>
+        <EntityType Name="Questions">
+          <Key>
+            <PropertyRef Name="QuestionID" />
+          </Key>
+          <Property Name="QuestionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuestionPaperID" Type="int" />
+          <Property Name="QuestionText" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="OptionA" Type="nvarchar(max)" />
+          <Property Name="OptionB" Type="nvarchar(max)" />
+          <Property Name="OptionC" Type="nvarchar(max)" />
+          <Property Name="OptionD" Type="nvarchar(max)" />
+          <Property Name="CorrectAnswer" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PasswordHash" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Role" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Answer_Question">
+          <End Role="Questions" Type="Self.Questions" Multiplicity="0..1" />
+          <End Role="Answer" Type="Self.Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Questions">
+              <PropertyRef Name="QuestionID" />
+            </Principal>
+            <Dependent Role="Answer">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Answer_QuestionPaper">
+          <End Role="QuestionPapers" Type="Self.QuestionPapers" Multiplicity="0..1" />
+          <End Role="Answer" Type="Self.Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionPapers">
+              <PropertyRef Name="QuestionPaperID" />
+            </Principal>
+            <Dependent Role="Answer">
+              <PropertyRef Name="QuestionPaperID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Answer_User">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Answer" Type="Self.Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Answer">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Question_QuestionPaper">
+          <End Role="QuestionPapers" Type="Self.QuestionPapers" Multiplicity="0..1" />
+          <End Role="Questions" Type="Self.Questions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionPapers">
+              <PropertyRef Name="QuestionPaperID" />
+            </Principal>
+            <Dependent Role="Questions">
+              <PropertyRef Name="QuestionPaperID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_QuestionPaper_Creator">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="QuestionPapers" Type="Self.QuestionPapers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="QuestionPapers">
+              <PropertyRef Name="CreatorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="QAManagementModelStoreContainer">
+          <EntitySet Name="Answer" EntityType="Self.Answer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="QuestionPapers" EntityType="Self.QuestionPapers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Questions" EntityType="Self.Questions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Answer_Question" Association="Self.FK_Answer_Question">
+            <End Role="Questions" EntitySet="Questions" />
+            <End Role="Answer" EntitySet="Answer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Answer_QuestionPaper" Association="Self.FK_Answer_QuestionPaper">
+            <End Role="QuestionPapers" EntitySet="QuestionPapers" />
+            <End Role="Answer" EntitySet="Answer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Answer_User" Association="Self.FK_Answer_User">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Answer" EntitySet="Answer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Question_QuestionPaper" Association="Self.FK_Question_QuestionPaper">
+            <End Role="QuestionPapers" EntitySet="QuestionPapers" />
+            <End Role="Questions" EntitySet="Questions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_QuestionPaper_Creator" Association="Self.FK_QuestionPaper_Creator">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="QuestionPapers" EntitySet="QuestionPapers" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="QAManagementModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Role" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="QuestionPapers" Relationship="QAManagementModel.FK_QuestionPaper_Creator" FromRole="User" ToRole="QuestionPaper" />
+          <NavigationProperty Name="Answers" Relationship="QAManagementModel.FK_Answer_User" FromRole="User" ToRole="Answer" />
+        </EntityType>
+        <EntityContainer Name="QAManagementEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <EntitySet Name="QuestionPapers" EntityType="QAManagementModel.QuestionPaper" />
+          <AssociationSet Name="FK_QuestionPaper_Creator" Association="QAManagementModel.FK_QuestionPaper_Creator">
+            <End Role="User" EntitySet="Users" />
+            <End Role="QuestionPaper" EntitySet="QuestionPapers" />
+          </AssociationSet>
+          <EntitySet Name="Questions" EntityType="QAManagementModel.Question" />
+          <AssociationSet Name="FK_Question_QuestionPaper" Association="QAManagementModel.FK_Question_QuestionPaper">
+            <End Role="QuestionPaper" EntitySet="QuestionPapers" />
+            <End Role="Question" EntitySet="Questions" />
+          </AssociationSet>
+          <EntitySet Name="Answers" EntityType="QAManagementModel.Answer" />
+          <AssociationSet Name="FK_Answer_Question" Association="QAManagementModel.FK_Answer_Question">
+            <End Role="Question" EntitySet="Questions" />
+            <End Role="Answer" EntitySet="Answers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Answer_QuestionPaper" Association="QAManagementModel.FK_Answer_QuestionPaper">
+            <End Role="QuestionPaper" EntitySet="QuestionPapers" />
+            <End Role="Answer" EntitySet="Answers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Answer_User" Association="QAManagementModel.FK_Answer_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Answer" EntitySet="Answers" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="QuestionPaper">
+          <Key>
+            <PropertyRef Name="QuestionPaperID" />
+          </Key>
+          <Property Name="QuestionPaperID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreationDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatorID" Type="Int32" />
+          <NavigationProperty Name="User" Relationship="QAManagementModel.FK_QuestionPaper_Creator" FromRole="QuestionPaper" ToRole="User" />
+          <NavigationProperty Name="Questions" Relationship="QAManagementModel.FK_Question_QuestionPaper" FromRole="QuestionPaper" ToRole="Question" />
+          <NavigationProperty Name="Answers" Relationship="QAManagementModel.FK_Answer_QuestionPaper" FromRole="QuestionPaper" ToRole="Answer" />
+        </EntityType>
+        <Association Name="FK_QuestionPaper_Creator">
+          <End Type="QAManagementModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="QAManagementModel.QuestionPaper" Role="QuestionPaper" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="QuestionPaper">
+              <PropertyRef Name="CreatorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Question">
+          <Key>
+            <PropertyRef Name="QuestionID" />
+          </Key>
+          <Property Name="QuestionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionPaperID" Type="Int32" />
+          <Property Name="QuestionText" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OptionA" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OptionB" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OptionC" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OptionD" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CorrectAnswer" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="QuestionPaper" Relationship="QAManagementModel.FK_Question_QuestionPaper" FromRole="Question" ToRole="QuestionPaper" />
+          <NavigationProperty Name="Answers" Relationship="QAManagementModel.FK_Answer_Question" FromRole="Question" ToRole="Answer" />
+        </EntityType>
+        <Association Name="FK_Question_QuestionPaper">
+          <End Type="QAManagementModel.QuestionPaper" Role="QuestionPaper" Multiplicity="0..1" />
+          <End Type="QAManagementModel.Question" Role="Question" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionPaper">
+              <PropertyRef Name="QuestionPaperID" />
+            </Principal>
+            <Dependent Role="Question">
+              <PropertyRef Name="QuestionPaperID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Answer">
+          <Key>
+            <PropertyRef Name="AnswerID" />
+          </Key>
+          <Property Name="AnswerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionID" Type="Int32" />
+          <Property Name="QuestionPaperID" Type="Int32" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="SelectedOption" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsCorrect" Type="Boolean" />
+          <NavigationProperty Name="Question" Relationship="QAManagementModel.FK_Answer_Question" FromRole="Answer" ToRole="Question" />
+          <NavigationProperty Name="QuestionPaper" Relationship="QAManagementModel.FK_Answer_QuestionPaper" FromRole="Answer" ToRole="QuestionPaper" />
+          <NavigationProperty Name="User" Relationship="QAManagementModel.FK_Answer_User" FromRole="Answer" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Answer_Question">
+          <End Type="QAManagementModel.Question" Role="Question" Multiplicity="0..1" />
+          <End Type="QAManagementModel.Answer" Role="Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="QuestionID" />
+            </Principal>
+            <Dependent Role="Answer">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Answer_QuestionPaper">
+          <End Type="QAManagementModel.QuestionPaper" Role="QuestionPaper" Multiplicity="0..1" />
+          <End Type="QAManagementModel.Answer" Role="Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QuestionPaper">
+              <PropertyRef Name="QuestionPaperID" />
+            </Principal>
+            <Dependent Role="Answer">
+              <PropertyRef Name="QuestionPaperID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Answer_User">
+          <End Type="QAManagementModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="QAManagementModel.Answer" Role="Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Answer">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="QAManagementModelStoreContainer" CdmEntityContainer="QAManagementEntities">
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="QAManagementModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="QuestionPapers">
+            <EntityTypeMapping TypeName="QAManagementModel.QuestionPaper">
+              <MappingFragment StoreEntitySet="QuestionPapers">
+                <ScalarProperty Name="CreatorID" ColumnName="CreatorID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="QuestionPaperID" ColumnName="QuestionPaperID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Questions">
+            <EntityTypeMapping TypeName="QAManagementModel.Question">
+              <MappingFragment StoreEntitySet="Questions">
+                <ScalarProperty Name="CorrectAnswer" ColumnName="CorrectAnswer" />
+                <ScalarProperty Name="OptionD" ColumnName="OptionD" />
+                <ScalarProperty Name="OptionC" ColumnName="OptionC" />
+                <ScalarProperty Name="OptionB" ColumnName="OptionB" />
+                <ScalarProperty Name="OptionA" ColumnName="OptionA" />
+                <ScalarProperty Name="QuestionText" ColumnName="QuestionText" />
+                <ScalarProperty Name="QuestionPaperID" ColumnName="QuestionPaperID" />
+                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Answers">
+            <EntityTypeMapping TypeName="QAManagementModel.Answer">
+              <MappingFragment StoreEntitySet="Answer">
+                <ScalarProperty Name="IsCorrect" ColumnName="IsCorrect" />
+                <ScalarProperty Name="SelectedOption" ColumnName="SelectedOption" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="QuestionPaperID" ColumnName="QuestionPaperID" />
+                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+                <ScalarProperty Name="AnswerID" ColumnName="AnswerID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

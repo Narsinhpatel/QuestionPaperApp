@@ -1,0 +1,76 @@
+﻿@model IEnumerable<QuestionPaperApp.Models.Question>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    /* Custom table styles */
+    .table {
+        width: 100%;
+        margin-bottom: 1rem;
+        background-color: transparent;
+    }
+
+        .table th,
+        .table td {
+            padding: 0.75rem;
+            vertical-align: top;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .table thead th {
+            vertical-align: bottom;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .table tbody + tbody {
+            border-top: 2px solid #dee2e6;
+        }
+</style>
+
+<h2 class="mb-2">Questions</h2>
+
+<p class="text-center">
+    @Html.ActionLink("Create New", "Create", new { questionPaperId = ViewBag.QuestionPaperId }, new { @class = "btn btn-info ", style = "border-radius: 5px;" })
+
+</p>
+
+@Html.Partial("_Notification")
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.QuestionText)</th>
+                <th>@Html.DisplayNameFor(model => model.OptionA)</th>
+                <th>@Html.DisplayNameFor(model => model.OptionB)</th>
+                <th>@Html.DisplayNameFor(model => model.OptionC)</th>
+                <th>@Html.DisplayNameFor(model => model.OptionD)</th>
+                <th>@Html.DisplayNameFor(model => model.CorrectAnswer)</th>
+                <th>@Html.DisplayNameFor(model => model.QuestionPaper.Title)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.QuestionText)</td>
+                    <td>@Html.DisplayFor(modelItem => item.OptionA)</td>
+                    <td>@Html.DisplayFor(modelItem => item.OptionB)</td>
+                    <td>@Html.DisplayFor(modelItem => item.OptionC)</td>
+                    <td>@Html.DisplayFor(modelItem => item.OptionD)</td>
+                    <td>@Html.DisplayFor(modelItem => item.CorrectAnswer)</td>
+                    <td>@Html.DisplayFor(modelItem => item.QuestionPaper.Title)</td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.QuestionID }, new { @class = "btn btn-info", style = "border-radius: 5px; margin-right: 5px;" })
+                        @Html.ActionLink("Details", "Details", new { id = item.QuestionID }, new { @class = "btn btn-primary", style = "border-radius: 5px; margin-right: 5px;" })
+                        @Html.ActionLink("Delete", "Delete", new { id = item.QuestionID }, new { @class = "btn btn-danger", style = "border-radius: 5px;" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

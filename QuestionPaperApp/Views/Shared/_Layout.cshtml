@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" integrity="sha384-4LISF5TTJX/fLmGSxO53rV4miRxdg84mZsxmO8Rx5jGtp/LbrixFETvWa5a6sESd" crossorigin="anonymous">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; 
+        }
+
+        .container.body-content {
+            flex: 1; 
+        }
+
+        footer {
+            background-color: #f8f9fa; 
+            padding: 20px 0; 
+            text-align: center; 
+            width: 100%; 
+            position: fixed; 
+            bottom: 0; 
+            left:0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
+        <div class="container">
+            @Html.ActionLink("QuizWhiz", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
+                @{
+                    var role = Session["UserRole"] as string;
+                }
+                @if (role == "Teacher")
+                {
+                    <ul class="navbar-nav flex-grow-1">
+                        <li>@Html.ActionLink("Home", "Index", "QuestionPapers", new { area = "" }, new { @class = "nav-link" })</li>
+                    </ul>
+                    <span>Welcome, Teacher!</span>
+                }
+                else if (role == "Admin")
+                {
+                    <ul class="navbar-nav flex-grow-1">
+                        <li>@Html.ActionLink("Home", "Index", "Admin", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("QuestionPapers", "QuestionPapers", "Admin", new { area = "" }, new { @class = "nav-link" })</li>
+                    </ul>
+                    <span>Welcome, Admin!</span>
+                }
+                else if (role == "Student")
+                {
+                    <ul class="navbar-nav flex-grow-1">
+                        <li>@Html.ActionLink("Home", "Index", "Student", new { area = "" }, new { @class = "nav-link" })</li>
+                    </ul>
+                    <span>Welcome, Student!</span>
+                }
+
+            </div>
+
+        </div>
+        
+        <ul class="navbar-nav flex-end">
+            <li>
+                @Html.ActionLink("LogOut", "Logout", "Users", new { area = "" }, new { @class = "nav-link" })
+            </li>
+        </ul>
+    </nav>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>Narsinh Patel    &copy; @DateTime.Now.Year - QuizWhiz                                      </p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

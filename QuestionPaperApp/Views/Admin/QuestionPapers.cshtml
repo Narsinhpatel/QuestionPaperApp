@@ -1,0 +1,68 @@
+﻿@model IEnumerable<QuestionPaperApp.Models.QuestionPaper>
+
+@{
+    ViewBag.Title = "QuestionPapers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@Html.Partial("_Notification")
+<h2 class="">Question Papers</h2>
+<section>
+    <div class="container">
+        <p class="text-center">
+            @Html.ActionLink("Create New ", "Create", "QuestionPapers", null, new { @class = "btn btn-info", style = "border-radius: 5px; margin-bottom: 10px;" })
+            @Html.ActionLink("Back to Users", "Index", null, new { @class = "btn btn-primary", style = "border-radius: 5px; margin-bottom: 10px;" })
+        </p>
+
+        <table class="table table-striped table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Title)</th>
+                    <th>@Html.DisplayNameFor(model => model.Description)</th>
+                    <th>@Html.DisplayNameFor(model => model.CreationDate)</th>
+                    <th>@Html.DisplayNameFor(model => model.User.Username)</th>
+                    <th>Status</th>
+
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Title)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                        <td>@Html.DisplayFor(modelItem => item.CreationDate)</td>
+                        <td>@Html.DisplayFor(modelItem => item.User.Username)</td>
+                        <td>
+                            <span style="color: white; background-color: @GetStatusBackgroundColor(item.Status); border-radius: 5px; padding: 3px;">@Html.DisplayFor(modelItem => item.Status)</span>
+                        </td>
+
+                        <td>
+                            @Html.ActionLink("Edit", "EditPaper", new { id = item.QuestionPaperID }, new { @class = "btn btn-info", style = "border-radius: 5px; margin-right: 5px;" })
+                            @Html.ActionLink("Details", "Index", "Questions", new { questionPaperID = item.QuestionPaperID }, new { @class = "btn btn-primary", style = "border-radius: 5px; margin-right: 5px;" })
+                            @Html.ActionLink("Delete", "Delete", "QuestionPapers", new { id = item.QuestionPaperID }, new { @class = "btn btn-danger", style = "border-radius: 5px;" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
+
+@functions {
+    // Function to get the background color based on status
+    public string GetStatusBackgroundColor(string status)
+    {
+        switch (status)
+        {
+            case "Approved":
+                return "green"; // Green background color for Approved status
+            case "Pending":
+                return "orange"; // Orange background color for Pending status
+            case "Rejected":
+                return "red"; // Red background color for Rejected status
+            default:
+                return "black"; // Default background color for other statuses
+        }
+    }
+}

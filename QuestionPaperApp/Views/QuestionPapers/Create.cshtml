@@ -1,0 +1,62 @@
+﻿@model QuestionPaperApp.Models.QuestionPaper
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .btn-color {
+        background-color: #0e1c36;
+        color: #fff;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-color:hover {
+            background-color: #0c204b; /* Change to desired hover color */
+        }
+
+  
+
+    .cardbody-color {
+        background-color: #ebf2fa;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .inp {
+        max-width: 100%;
+    }
+</style>
+
+<h2 class="text-center mt-5">Create Question Paper</h2>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card my-5">
+                <form class="card-body p-lg-5" method="post" action="@Url.Action("Create", "QuestionPapers")">
+                    @Html.AntiForgeryToken()
+
+                    <div class="mb-3">
+                        @Html.LabelFor(m => m.Title, new { @class = "form-label inp" })
+                        @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="mb-3">
+                        @Html.LabelFor(m => m.Description, new { @class = "form-label" })
+                        @Html.TextBoxFor(m => m.Description, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
+                    </div>
+
+                    <button type="submit" class="btn btn-color w-100">Create</button>
+
+                   
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
